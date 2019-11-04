@@ -5,7 +5,6 @@ metadata:
 spec:
   selector:
     app: web
-    release: "0-5"
   ports:
     - name: http
       port: 80
@@ -13,27 +12,20 @@ spec:
   type: NodePort
 
 ---
-apiVersion: v1
-kind: Pod
+apiVersion: apps/v1
+kind: ReplicaSet
 metadata:
-  name: web-release-0
-  labels:
-    app: web
-    release: "0"
+  name: web
 spec:
-  containers:
-  - name: web
-    image: richardchesterwood/k8s-fleetman-webapp-angular:release0
-
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: web-release-0-5
-  labels:
-    app: web
-    release: "0-5"
-spec:
-  containers:
-  - name: web
-    image: richardchesterwood/k8s-fleetman-webapp-angular:release0-5
+  selector:
+    matchLabels:
+      app: web
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: web
+    spec:
+      containers:
+      - name: web
+        image: richardchesterwood/k8s-fleetman-webapp-angular:release0-5
